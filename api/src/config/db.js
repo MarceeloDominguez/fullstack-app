@@ -5,16 +5,16 @@ const pool = new pg.Pool({
 });
 
 // Function to test the database connection
-async function getPgVersion() {
-  const client = await pool.connect();
-  try {
-    const result = await client.query("SELECT version()");
-    console.log(result.rows[0]);
-  } finally {
-    client.release();
-  }
-}
+// async function getPgVersion() {
+//   const client = await pool.connect();
+//   try {
+//     const result = await client.query("SELECT version()");
+//     console.log(result.rows[0]);
+//   } finally {
+//     client.release();
+//   }
+// }
 
-getPgVersion(); // Run the function to verify connection
+//getPgVersion(); // Run the function to verify connection
 
 export default pool;
