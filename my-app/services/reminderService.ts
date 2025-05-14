@@ -6,3 +6,20 @@ export async function getReminders() {
   const data = await response.json();
   return data;
 }
+
+export async function completeReminder(id: number, isCompleted: boolean) {
+  const response = await fetch(`http://10.0.2.2:3001/reminders/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ completed: isCompleted }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+
+  const data = await response.json();
+  return data;
+}

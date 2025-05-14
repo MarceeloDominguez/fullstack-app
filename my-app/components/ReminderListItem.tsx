@@ -1,27 +1,40 @@
+import { useCompleteReminder } from "@/queries/reminder";
 import { ReminderListItemProps } from "@/types/reminderTypes";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function ReminderListItem({
   reminderItem,
 }: ReminderListItemProps) {
-  const { reminder, notes, completed } = reminderItem;
+  const { reminder, notes, completed, id } = reminderItem;
+  const [isCompleted, setIsCompleted] = useState(completed);
+
+  const { mutate: completeTask } = useCompleteReminder((newStatus) => {
+    setIsCompleted(newStatus);
+  });
 
   return (
     <TouchableOpacity
       activeOpacity={0.7}
-      onPress={() => console.log("Reminder pressed")}
+      onPress={() => completeTask({ completed: !isCompleted, id: Number(id) })}
       style={styles.container}
     >
-      <Ionicons name="checkmark-circle-outline" size={24} color="gray" />
+      {isCompleted ? (
+        <Ionicons name="checkmark-circle-outline" size={24} color="green" />
+      ) : (
+        <Ionicons name="add-circle-outline" size={24} color="gray" />
+      )}
+
       <View style={styles.textContainer}>
         <Text numberOfLines={1} style={styles.text}>
           {reminder}
         </Text>
-        <Text numberOfLines={2} style={styles.notes}>
-          {notes}
-        </Text>
+        {!!notes && (
+          <Text numberOfLines={2} style={styles.notes}>
+            {notes}
+          </Text>
+        )}
       </View>
       <Ionicons name="chevron-forward" size={20} color="gray" />
     </TouchableOpacity>

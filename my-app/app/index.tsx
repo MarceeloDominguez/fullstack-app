@@ -1,16 +1,12 @@
 import ReminderListItem from "@/components/ReminderListItem";
-import { getReminders } from "@/services/reminderService";
-import { useQuery } from "@tanstack/react-query";
+import { useGetReminders } from "@/queries/reminder";
 import React from "react";
 import { ActivityIndicator, FlatList, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import "../global.css";
 
 export default function HomeScreen() {
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["reminders"],
-    queryFn: () => getReminders(),
-  });
+  const { data, error, isLoading } = useGetReminders();
 
   if (isLoading) {
     return (
