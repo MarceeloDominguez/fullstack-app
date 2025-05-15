@@ -9,3 +9,9 @@ export type Reminder = {
 export type ReminderListItemProps = {
   reminderItem: Reminder;
 };
+
+export type InsertReminder = {
+  reminder: string;
+  notes?: string | null;
+  userId: number;
+};

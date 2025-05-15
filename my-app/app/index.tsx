@@ -1,7 +1,9 @@
 import ReminderListItem from "@/components/ReminderListItem";
 import { useGetReminders } from "@/queries/reminder";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { Link } from "expo-router";
 import React from "react";
-import { ActivityIndicator, FlatList, Text } from "react-native";
+import { ActivityIndicator, FlatList, Pressable, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import "../global.css";
 
@@ -34,7 +36,12 @@ export default function HomeScreen() {
         renderItem={({ item }) => <ReminderListItem reminderItem={item} />}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
-          <Text className="text-2xl font-bold text-center mb-2">Reminders</Text>
+          <Link href="/createUpdateReminder" asChild>
+            <Pressable className="flex-row items-center justify-between my-2">
+              <Text className="text-2xl font-bold">Reminders</Text>
+              <Ionicons name="add-circle-outline" size={28} color="gray" />
+            </Pressable>
+          </Link>
         }
         contentContainerClassName="px-4"
       />
