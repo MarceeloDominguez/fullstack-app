@@ -1,8 +1,14 @@
-import { useCreateReminder } from "@/queries/reminder";
-import { InsertReminder } from "@/types/reminderTypes";
-import { router } from "expo-router";
-import React, { useState } from "react";
 import {
+  useCreateReminder,
+  useReminderById,
+  useUpdateReminder,
+} from "@/queries/reminder";
+import { InsertReminder, UpdateReminder } from "@/types/reminderTypes";
+import { router, useLocalSearchParams } from "expo-router";
+import React, { useEffect, useState } from "react";
+import {
+  ActivityIndicator,
+  SafeAreaView,
   StyleSheet,
   Text,
   TextInput,
@@ -11,10 +17,13 @@ import {
 } from "react-native";
 
 export default function CreateUpdateReminder() {
+  const { id: reminderId } = useLocalSearchParams();
   const [reminder, setReminder] = useState("");
   const [notes, setNotes] = useState("");
 
-  const { mutate: saveReminder } = useCreateReminder(() => {
+  const { data, isLoading, error } = useReminderById(Number(reminderId));
+
+  const { mutate: saveReminder, isPending } = useCreateReminder(() => {
     setReminder("");
     setNotes("");
     router.back();
@@ -31,6 +40,57 @@ export default function CreateUpdateReminder() {
     }
 
     saveReminder(reminderData);
+  };
+
+  const { mutate: updateReminder } = useUpdateReminder(
+    Number(reminderId),
+    () => {
+      router.back();
+    }
+  );
+
+  const handleUpdate = () => {
+    const newReminder: UpdateReminder = {
+      reminder,
+      notes,
+    };
+
+    updateReminder(newReminder);
+  };
+
+  useEffect(() => {
+    if (data) {
+      setReminder(data.reminder);
+      setNotes(data.notes);
+    }
+  }, [data]);
+
+  if (isLoading) {
+    return (
+      <SafeAreaView className="flex-1 bg-white justify-center">
+        <ActivityIndicator size={"large"} />
+      </SafeAreaView>
+    );
+  }
+
+  if (error) {
+    return (
+      <SafeAreaView className="flex-1 bg-white justify-center">
+        <Text className="text-red-500 text-center">
+          An error occurred while fetching reminders.
+        </Text>
+      </SafeAreaView>
+    );
+  }
+
+  const isSaveButtonDisabled = () => isPending || reminder.length === 0;
+
+  const onDonePressing = () => {
+    if (reminderId) {
+      return handleUpdate();
+    }
+
+    return handleSaveReminder();
   };
 
   return (
@@ -56,9 +116,12 @@ export default function CreateUpdateReminder() {
       <TouchableOpacity
         activeOpacity={0.7}
         style={styles.button}
-        onPress={handleSaveReminder}
+        onPress={onDonePressing}
+        disabled={isSaveButtonDisabled()}
       >
-        <Text style={styles.buttonText}>Create Reminder</Text>
+        <Text style={styles.buttonText}>
+          {reminderId ? "Update Reminder" : "Create Reminder"}
+        </Text>
       </TouchableOpacity>
     </View>
   );

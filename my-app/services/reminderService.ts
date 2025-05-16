@@ -1,4 +1,4 @@
-import { InsertReminder } from "@/types/reminderTypes";
+import { InsertReminder, UpdateReminder } from "@/types/reminderTypes";
 
 export async function getReminders() {
   const response = await fetch("http://10.0.2.2:3001/reminders");
@@ -33,6 +33,37 @@ export async function createReminder(newReminder: InsertReminder) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(newReminder),
+  });
+
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+
+  const data = await response.json();
+  return data;
+}
+
+export async function getReminderById(id: number) {
+  const response = await fetch(`http://10.0.2.2:3001/reminders/${id}`);
+
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+
+  const data = await response.json();
+  return data;
+}
+
+export async function updateOldReminder(
+  id: number,
+  updatedReminder: UpdateReminder
+) {
+  const response = await fetch(`http://10.0.2.2:3001/reminders/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(updatedReminder),
   });
 
   if (!response.ok) {

@@ -1,6 +1,7 @@
 import { useCompleteReminder } from "@/queries/reminder";
 import { ReminderListItemProps } from "@/types/reminderTypes";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { Link } from "expo-router";
 import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
@@ -36,7 +37,14 @@ export default function ReminderListItem({
           </Text>
         )}
       </View>
-      <Ionicons name="chevron-forward" size={20} color="gray" />
+      <Link href={`/createUpdateReminder?id=${id}`} asChild>
+        <Ionicons
+          name="chevron-forward"
+          size={20}
+          color="gray"
+          style={{ padding: 8 }}
+        />
+      </Link>
     </TouchableOpacity>
   );
 }
