@@ -1,13 +1,16 @@
 import {
   useCreateReminder,
+  useDeleteReminder,
   useReminderById,
   useUpdateReminder,
 } from "@/queries/reminder";
 import { InsertReminder, UpdateReminder } from "@/types/reminderTypes";
-import { router, useLocalSearchParams } from "expo-router";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import { router, Stack, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
+  Alert,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -58,6 +61,31 @@ export default function CreateUpdateReminder() {
     updateReminder(newReminder);
   };
 
+  const { mutate: removeReminder } = useDeleteReminder(
+    Number(reminderId),
+    () => {
+      router.back();
+    }
+  );
+
+  const handleDeleteReminder = () => {
+    Alert.alert(
+      "Delete Reminder",
+      "Are you sure you want to delete this reminder?",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: () => {
+            removeReminder();
+            console.log("Reminder deleted");
+          },
+        },
+      ]
+    );
+  };
+
   useEffect(() => {
     if (data) {
       setReminder(data.reminder);
@@ -95,6 +123,22 @@ export default function CreateUpdateReminder() {
 
   return (
     <View style={styles.container}>
+      <Stack.Screen
+        options={{
+          headerShadowVisible: false,
+          headerTitle: reminderId ? "Update Reminder" : "New Reminder",
+          headerTitleAlign: "center",
+          headerRight: () =>
+            !!reminderId && (
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={handleDeleteReminder}
+              >
+                <AntDesign name="delete" size={24} color="red" />
+              </TouchableOpacity>
+            ),
+        }}
+      />
       <Text style={styles.text}>Create Reminder</Text>
       <TextInput
         placeholder="What do you want to remember?"

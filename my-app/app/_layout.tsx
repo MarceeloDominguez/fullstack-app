@@ -7,16 +7,9 @@ const queryClient = new QueryClient();
 export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Stack screenOptions={{ animation: "slide_from_right" }}>
+      <Stack screenOptions={{ animation: "fade" }}>
         <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="createUpdateReminder"
-          options={{
-            headerShadowVisible: false,
-            headerTitle: "New Reminder",
-            headerTitleAlign: "center",
-          }}
-        />
+        <Stack.Screen name="createUpdateReminder" />
       </Stack>
     </QueryClientProvider>
   );

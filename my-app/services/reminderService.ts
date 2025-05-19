@@ -3,7 +3,7 @@ import { InsertReminder, UpdateReminder } from "@/types/reminderTypes";
 export async function getReminders() {
   const response = await fetch("http://10.0.2.2:3001/reminders");
   if (!response.ok) {
-    throw new Error("Network response was not ok");
+    throw new Error("Failed to fetch reminders");
   }
   const data = await response.json();
   return data;
@@ -19,7 +19,7 @@ export async function completeReminder(id: number, isCompleted: boolean) {
   });
 
   if (!response.ok) {
-    throw new Error("Network response was not ok");
+    throw new Error("failed to update reminder");
   }
 
   const data = await response.json();
@@ -36,7 +36,7 @@ export async function createReminder(newReminder: InsertReminder) {
   });
 
   if (!response.ok) {
-    throw new Error("Network response was not ok");
+    throw new Error("Failed to create reminder");
   }
 
   const data = await response.json();
@@ -47,7 +47,7 @@ export async function getReminderById(id: number) {
   const response = await fetch(`http://10.0.2.2:3001/reminders/${id}`);
 
   if (!response.ok) {
-    throw new Error("Network response was not ok");
+    throw new Error("Failed to fetch reminder");
   }
 
   const data = await response.json();
@@ -67,7 +67,20 @@ export async function updateOldReminder(
   });
 
   if (!response.ok) {
-    throw new Error("Network response was not ok");
+    throw new Error("Failed to update reminder");
+  }
+
+  const data = await response.json();
+  return data;
+}
+
+export async function deleteReminder(id: number) {
+  const response = await fetch(`http://10.0.2.2:3001/reminders/${id}`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to delete reminder");
   }
 
   const data = await response.json();

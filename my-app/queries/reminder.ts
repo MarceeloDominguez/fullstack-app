@@ -1,6 +1,7 @@
 import {
   completeReminder,
   createReminder,
+  deleteReminder,
   getReminderById,
   getReminders,
   updateOldReminder,
@@ -78,6 +79,34 @@ export const useUpdateReminder = (
   return useMutation({
     mutationFn: (newReminder: UpdateReminder) =>
       updateOldReminder(reminderId, newReminder),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["reminders"] });
+      if (onSucessCallback) {
+        onSucessCallback();
+      }
+    },
+    onError: (error) => {
+      Alert.alert("Error", error.message, [
+        {
+          text: "OK",
+        },
+      ]);
+      if (onErrorCallback) {
+        onErrorCallback(error);
+      }
+    },
+  });
+};
+
+export const useDeleteReminder = (
+  reminderId: number,
+  onSucessCallback?: () => void,
+  onErrorCallback?: (error: Error) => void
+) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: () => deleteReminder(reminderId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["reminders"] });
       if (onSucessCallback) {
