@@ -56,7 +56,7 @@ export const ReminderService = {
       throw new CustomError(ERROR_MESSAGES.FORBIDDEN, 403);
     }
 
-    const deletedReminder = await ReminderModel.delete(id);
+    const deletedReminder = await ReminderModel.deleteReminder(id);
 
     if (deletedReminder === 0) {
       throw new CustomError(ERROR_MESSAGES.INTERNAL_SERVER_ERROR, 500);
