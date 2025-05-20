@@ -8,6 +8,7 @@ export async function up() {
         reminder VARCHAR(255) NOT NULL,
         notes TEXT,
         completed BOOLEAN DEFAULT FALSE,
+        importance TEXT DEFAULT 'low',
         user_id INT REFERENCES users(id) ON DELETE CASCADE,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )

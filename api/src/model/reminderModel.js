@@ -15,10 +15,10 @@ export const ReminderModel = {
     return result.rows[0];
   },
 
-  async createReminder({ reminder, notes, userId }) {
+  async createReminder({ reminder, notes, userId, importance }) {
     const result = await db.query(
-      "INSERT INTO reminders (reminder, notes, user_id) VALUES ($1, $2, $3) RETURNING *",
-      [reminder, notes, userId]
+      "INSERT INTO reminders (reminder, notes, user_id, importance) VALUES ($1, $2, $3, $4) RETURNING *",
+      [reminder, notes, userId, importance]
     );
     return result.rows[0];
   },

@@ -14,12 +14,13 @@ export const ReminderService = {
   },
 
   async createReminder(reminderData) {
-    const { reminder, notes, userId } = reminderData;
+    const { reminder, notes, userId, importance = "low" } = reminderData;
 
     const sanitizedReminder = {
       reminder: reminder?.trim(),
       notes: notes?.trim(),
       userId,
+      importance,
     };
 
     const createdReminder = await ReminderModel.createReminder(
