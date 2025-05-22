@@ -1,3 +1,4 @@
+import CheckboxItem from "@/components/CheckboxItem";
 import {
   useCreateReminder,
   useDeleteReminder,
@@ -19,10 +20,17 @@ import {
   View,
 } from "react-native";
 
+const importanceLavels = [
+  { label: "Low", value: "low" },
+  { label: "Medium", value: "medium" },
+  { label: "High", value: "high" },
+];
+
 export default function CreateUpdateReminder() {
   const { id: reminderId } = useLocalSearchParams();
   const [reminder, setReminder] = useState("");
   const [notes, setNotes] = useState("");
+  const [importance, setImportance] = useState(importanceLavels[0].value);
 
   const { data, isLoading, error } = useReminderById(Number(reminderId));
 
@@ -36,6 +44,7 @@ export default function CreateUpdateReminder() {
     let reminderData: InsertReminder = {
       reminder,
       userId: 1,
+      importance,
     };
 
     if (notes) {
@@ -56,6 +65,7 @@ export default function CreateUpdateReminder() {
     const newReminder: UpdateReminder = {
       reminder,
       notes,
+      importance,
     };
 
     updateReminder(newReminder);
@@ -90,6 +100,7 @@ export default function CreateUpdateReminder() {
     if (data) {
       setReminder(data.reminder);
       setNotes(data.notes);
+      setImportance(data.importance);
     }
   }, [data]);
 
@@ -157,6 +168,17 @@ export default function CreateUpdateReminder() {
         value={notes}
         onChangeText={(text) => setNotes(text)}
       />
+      <Text style={styles.text}>Select Importance (optional)</Text>
+      <View>
+        {importanceLavels.map((item) => (
+          <CheckboxItem
+            key={item.value}
+            item={item}
+            importance={importance}
+            setImportance={setImportance}
+          />
+        ))}
+      </View>
       <TouchableOpacity
         activeOpacity={0.7}
         style={styles.button}

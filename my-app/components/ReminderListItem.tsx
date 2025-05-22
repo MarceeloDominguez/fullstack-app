@@ -8,7 +8,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 export default function ReminderListItem({
   reminderItem,
 }: ReminderListItemProps) {
-  const { reminder, notes, completed, id } = reminderItem;
+  const { reminder, notes, completed, id, importance } = reminderItem;
   const [isCompleted, setIsCompleted] = useState(completed);
 
   const { mutate: completeTask } = useCompleteReminder((newStatus) => {
@@ -36,6 +36,7 @@ export default function ReminderListItem({
             {notes}
           </Text>
         )}
+        <Text>{importance}</Text>
       </View>
       <Link href={`/createUpdateReminder?id=${id}`} asChild>
         <Ionicons
