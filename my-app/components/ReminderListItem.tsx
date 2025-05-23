@@ -36,14 +36,26 @@ export default function ReminderListItem({
             {notes}
           </Text>
         )}
-        <Text>{importance}</Text>
+        <View
+          style={{
+            ...styles.containerTag,
+            backgroundColor:
+              importance === "high"
+                ? "rgba(255, 0, 0, 0.5)"
+                : importance === "medium"
+                ? "rgba(255, 255, 0, 0.5)"
+                : "rgba(0, 255, 0, 0.5)",
+          }}
+        >
+          <Text style={styles.importance}>{importance}</Text>
+        </View>
       </View>
       <Link href={`/createUpdateReminder?id=${id}`} asChild>
         <Ionicons
           name="chevron-forward"
           size={20}
           color="gray"
-          style={{ padding: 8 }}
+          style={styles.iconForward}
         />
       </Link>
     </TouchableOpacity>
@@ -72,5 +84,21 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     flex: 1,
+  },
+  containerTag: {
+    borderRadius: 5,
+    marginTop: 5,
+    width: 50,
+    height: 16,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  importance: {
+    textTransform: "capitalize",
+    fontSize: 10,
+    fontWeight: "bold",
+  },
+  iconForward: {
+    padding: 8,
   },
 });
