@@ -1,14 +1,37 @@
 import ReminderListItem from "@/components/ReminderListItem";
 import { useGetReminders } from "@/queries/reminder";
+import { Reminder } from "@/types/reminderTypes";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Link } from "expo-router";
-import React from "react";
-import { ActivityIndicator, FlatList, Pressable, Text } from "react-native";
+import React, { useState } from "react";
+import {
+  ActivityIndicator,
+  FlatList,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import "../global.css";
 
+const importanceLevels = ["all", "low", "medium", "high"];
+
 export default function HomeScreen() {
   const { data, error, isLoading } = useGetReminders();
+  const [selectedImportance, setSelectedImportance] = useState("all");
+
+  const handleImportanceChange = (importance: string) => {
+    setSelectedImportance(importance);
+  };
+
+  let filteredData = data || [];
+
+  if (data && selectedImportance !== "all") {
+    filteredData = data.filter(
+      (reminder: Reminder) => reminder.importance === selectedImportance
+    );
+  }
 
   if (isLoading) {
     return (
@@ -30,21 +53,61 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
+      <Link href="/createUpdateReminder" asChild className="px-4">
+        <Pressable className="flex-row items-center justify-between my-2">
+          <Text className="text-2xl font-bold">Reminders</Text>
+          <Ionicons name="add-circle-outline" size={28} color="gray" />
+        </Pressable>
+      </Link>
       <FlatList
-        data={data}
+        data={filteredData}
         keyExtractor={(_, index) => index.toString()}
         renderItem={({ item }) => <ReminderListItem reminderItem={item} />}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
-          <Link href="/createUpdateReminder" asChild>
-            <Pressable className="flex-row items-center justify-between my-2">
-              <Text className="text-2xl font-bold">Reminders</Text>
-              <Ionicons name="add-circle-outline" size={28} color="gray" />
-            </Pressable>
-          </Link>
+          <View className="flex-row justify-between items-center py-3">
+            <Text className="text-md font-semibold">Filter by Importance</Text>
+            <View className="flex-row gap-1">
+              {importanceLevels.map((importance) => (
+                <Pressable
+                  key={importance}
+                  onPress={() => handleImportanceChange(importance)}
+                  style={{
+                    backgroundColor:
+                      selectedImportance === importance
+                        ? "rgba(3, 12, 22, 0.781)"
+                        : "rgba(229, 231, 235, 0.5)",
+                    ...styles.buttonImportance,
+                  }}
+                >
+                  <Text
+                    style={{
+                      color:
+                        selectedImportance === importance ? "white" : "black",
+                      textTransform: "capitalize",
+                      ...styles.textButtonImportance,
+                    }}
+                  >
+                    {importance}
+                  </Text>
+                </Pressable>
+              ))}
+            </View>
+          </View>
         }
         contentContainerClassName="px-4"
       />
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  buttonImportance: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 9999,
+  },
+  textButtonImportance: {
+    fontSize: 12,
+  },
+});
