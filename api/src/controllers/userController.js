@@ -10,4 +10,14 @@ export const UserController = {
       console.log(error);
     }
   },
+
+  async loginUser(req, res) {
+    try {
+      const data = await UserService.loginUser(req.body);
+      res.status(200).json(data);
+    } catch (error) {
+      res.status(500).json({ error: "Internal Server Error" });
+      console.log(error);
+    }
+  },
 };
