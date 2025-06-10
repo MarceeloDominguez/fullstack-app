@@ -13,7 +13,6 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import "../global.css";
 
 const importanceLevels = ["all", "low", "medium", "high"];
 
@@ -53,7 +52,7 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <Link href="/createUpdateReminder" asChild className="px-4">
+      <Link href="/(protected)/createUpdateReminder" asChild className="px-4">
         <Pressable className="flex-row items-center justify-between my-2">
           <Text className="text-2xl font-bold">Reminders</Text>
           <Ionicons name="add-circle-outline" size={28} color="gray" />
