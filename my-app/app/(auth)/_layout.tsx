@@ -2,5 +2,7 @@ import { Stack } from "expo-router";
 import React from "react";
 
 export default function AuthLayout() {
-  return <Stack screenOptions={{ animation: "fade" }} />;
+  return (
+    <Stack screenOptions={{ animation: "fade", headerShadowVisible: false }} />
+  );
 }
