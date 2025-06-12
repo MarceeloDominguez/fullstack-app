@@ -1,6 +1,8 @@
+import { useRegisterUser } from "@/queries/auth";
 import { router, Stack } from "expo-router";
 import React, { useState } from "react";
 import {
+  Alert,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -13,6 +15,28 @@ export default function RegisterScreen() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const { mutate: registerUser } = useRegisterUser();
+
+  const handleRegister = () => {
+    if (!name || !email || !password) {
+      Alert.alert("Please fill in all fields");
+      return;
+    }
+
+    registerUser(
+      { name, email, password },
+      {
+        onSuccess: () => {
+          Alert.alert("Registration successful!");
+          router.back();
+        },
+        onError: (error) => {
+          Alert.alert(`Registration failed: ${error.message}`);
+        },
+      }
+    );
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-white px-4 py-8">
@@ -53,7 +77,11 @@ export default function RegisterScreen() {
           />
         </View>
       </View>
-      <TouchableOpacity style={styles.button} activeOpacity={0.7}>
+      <TouchableOpacity
+        style={styles.button}
+        activeOpacity={0.7}
+        onPress={handleRegister}
+      >
         <Text style={styles.buttonText}>Register</Text>
       </TouchableOpacity>
       <View className="flex-row justify-center mt-4">
