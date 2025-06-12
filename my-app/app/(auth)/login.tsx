@@ -1,6 +1,8 @@
-import { Link, Stack } from "expo-router";
+import { useLoginUser } from "@/queries/auth";
+import { Link, router, Stack } from "expo-router";
 import React, { useState } from "react";
 import {
+  Alert,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -12,6 +14,28 @@ import {
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const { mutate: loginUser } = useLoginUser();
+
+  const handleLogin = () => {
+    if (!email || !password) {
+      Alert.alert("Please fill in all fields");
+      return;
+    }
+
+    loginUser(
+      { email, password },
+      {
+        onSuccess: () => {
+          Alert.alert("Login successful!");
+          router.replace("/(protected)");
+        },
+        onError: (error) => {
+          Alert.alert(`Login failed: ${error.message}`);
+        },
+      }
+    );
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-white px-4 py-8">
@@ -43,7 +67,11 @@ export default function LoginScreen() {
           />
         </View>
       </View>
-      <TouchableOpacity style={styles.button} activeOpacity={0.7}>
+      <TouchableOpacity
+        style={styles.button}
+        activeOpacity={0.7}
+        onPress={handleLogin}
+      >
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
       <View className="flex-row justify-center mt-4">
@@ -52,9 +80,6 @@ export default function LoginScreen() {
           <Text className="font-bold">Register</Text>
         </Link>
       </View>
-      <Link href={"/(protected)"} asChild>
-        <Text className="text-blue-500">Go to Home</Text>
-      </Link>
     </SafeAreaView>
   );
 }

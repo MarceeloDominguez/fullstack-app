@@ -2,7 +2,8 @@ import ReminderListItem from "@/components/ReminderListItem";
 import { useGetReminders } from "@/queries/reminder";
 import { Reminder } from "@/types/reminderTypes";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
+import * as SecureStore from "expo-secure-store";
 import React, { useState } from "react";
 import {
   ActivityIndicator,
@@ -50,8 +51,13 @@ export default function HomeScreen() {
     );
   }
 
+  const logout = async () => {
+    await SecureStore.deleteItemAsync("token");
+    router.replace("/(auth)/login");
+  };
+
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className=" bg-white">
       <Link href="/(protected)/createUpdateReminder" asChild className="px-4">
         <Pressable className="flex-row items-center justify-between my-2">
           <Text className="text-2xl font-bold">Reminders</Text>
