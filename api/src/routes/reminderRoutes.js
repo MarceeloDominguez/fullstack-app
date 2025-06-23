@@ -5,11 +5,17 @@ import {
   updateReminderSchema,
 } from "../schemas/reminderSchema.js";
 import { validateData } from "../middleware/validationMiddleware.js";
+import { authMiddleware } from "../middleware/auth.js";
 
 const router = Router();
 
 router.get("/", ReminderController.getAllReminders);
 router.get("/:id", ReminderController.getReminderById);
+router.get(
+  "/user/:userId",
+  authMiddleware,
+  ReminderController.getRemindersByUserId
+);
 router.post(
   "/",
   validateData(createReminderSchema),

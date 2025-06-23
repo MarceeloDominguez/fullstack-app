@@ -13,6 +13,10 @@ export const ReminderService = {
     return reminder;
   },
 
+  async getRemindersByUserId(userId) {
+    return await ReminderModel.getRemindersByUserId(userId);
+  },
+
   async createReminder(reminderData) {
     const { reminder, notes, userId, importance = "low" } = reminderData;
 

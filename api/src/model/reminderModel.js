@@ -15,6 +15,14 @@ export const ReminderModel = {
     return result.rows[0];
   },
 
+  async getRemindersByUserId(userId) {
+    const result = await db.query(
+      "SELECT * FROM reminders WHERE user_id = $1 ORDER BY created_at DESC",
+      [userId]
+    );
+    return result.rows;
+  },
+
   async createReminder({ reminder, notes, userId, importance }) {
     const result = await db.query(
       "INSERT INTO reminders (reminder, notes, user_id, importance) VALUES ($1, $2, $3, $4) RETURNING *",
