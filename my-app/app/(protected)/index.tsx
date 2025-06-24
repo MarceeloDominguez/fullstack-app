@@ -1,5 +1,5 @@
 import ReminderListItem from "@/components/ReminderListItem";
-import { useGetReminders } from "@/queries/reminder";
+import { useGetRemindersByUser } from "@/queries/reminder";
 import { Reminder } from "@/types/reminderTypes";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Link } from "expo-router";
@@ -17,7 +17,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 const importanceLevels = ["all", "low", "medium", "high"];
 
 export default function HomeScreen() {
-  const { data, error, isLoading } = useGetReminders();
+  const { data, error, isLoading } = useGetRemindersByUser();
   const [selectedImportance, setSelectedImportance] = useState("all");
 
   const handleImportanceChange = (importance: string) => {
@@ -68,6 +68,11 @@ export default function HomeScreen() {
         keyExtractor={(_, index) => index.toString()}
         renderItem={({ item }) => <ReminderListItem reminderItem={item} />}
         showsVerticalScrollIndicator={false}
+        ListEmptyComponent={
+          <View className="flex-1 justify-center items-center mt-5">
+            <Text className="text-gray-500 text-lg">No reminders found.</Text>
+          </View>
+        }
         ListHeaderComponent={
           <View className="flex-row justify-between items-center py-3">
             <Text className="text-md font-semibold">Filter by Importance</Text>

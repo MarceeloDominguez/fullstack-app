@@ -14,7 +14,6 @@ export type ReminderListItemProps = {
 export type InsertReminder = {
   reminder: string;
   notes?: string | null;
-  userId: number;
   importance?: string;
 };
 

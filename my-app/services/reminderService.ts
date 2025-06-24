@@ -1,10 +1,29 @@
 import { InsertReminder, UpdateReminder } from "@/types/reminderTypes";
+import * as SecureStore from "expo-secure-store";
 
 export async function getReminders() {
   const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/reminders`);
   if (!response.ok) {
     throw new Error("Failed to fetch reminders");
   }
+  const data = await response.json();
+  return data;
+}
+
+export async function getReminderByUser() {
+  const token = await SecureStore.getItemAsync("token");
+
+  const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/reminders`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch reminders by user ID");
+  }
+
   const data = await response.json();
   return data;
 }
@@ -30,10 +49,13 @@ export async function completeReminder(id: number, isCompleted: boolean) {
 }
 
 export async function createReminder(newReminder: InsertReminder) {
+  const token = await SecureStore.getItemAsync("token");
+
   const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/reminders`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(newReminder),
   });

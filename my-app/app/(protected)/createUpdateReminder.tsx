@@ -43,7 +43,6 @@ export default function CreateUpdateReminder() {
   const handleSaveReminder = () => {
     let reminderData: InsertReminder = {
       reminder,
-      userId: 1,
       importance,
     };
 

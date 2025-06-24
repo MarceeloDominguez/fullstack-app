@@ -3,6 +3,7 @@ import {
   createReminder,
   deleteReminder,
   getReminderById,
+  getReminderByUser,
   getReminders,
   updateOldReminder,
 } from "@/services/reminderService";
@@ -14,6 +15,13 @@ export const useGetReminders = () => {
   return useQuery({
     queryKey: ["reminders"],
     queryFn: () => getReminders(),
+  });
+};
+
+export const useGetRemindersByUser = () => {
+  return useQuery({
+    queryKey: ["reminders"],
+    queryFn: () => getReminderByUser(),
   });
 };
 
