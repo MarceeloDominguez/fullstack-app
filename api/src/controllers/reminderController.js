@@ -12,7 +12,8 @@ export const ReminderController = {
 
   async getRemindersByUserId(req, res, next) {
     try {
-      const userId = parseInt(req.params.userId, 10);
+      //const userId = parseInt(req.params.userId, 10);
+      const userId = req.user.id;
 
       const reminders = await ReminderService.getRemindersByUserId(userId);
       res.status(200).json(reminders);
@@ -34,7 +35,11 @@ export const ReminderController = {
 
   async createReminder(req, res, next) {
     try {
-      const newReminder = await ReminderService.createReminder(req.body);
+      const userId = req.user.id;
+      const newReminder = await ReminderService.createReminder({
+        ...req.body,
+        userId,
+      });
       res.status(201).json(newReminder);
     } catch (error) {
       next(error);

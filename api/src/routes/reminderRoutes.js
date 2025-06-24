@@ -9,15 +9,12 @@ import { authMiddleware } from "../middleware/auth.js";
 
 const router = Router();
 
-router.get("/", ReminderController.getAllReminders);
+router.get("/all", ReminderController.getAllReminders);
 router.get("/:id", ReminderController.getReminderById);
-router.get(
-  "/user/:userId",
-  authMiddleware,
-  ReminderController.getRemindersByUserId
-);
+router.get("/", authMiddleware, ReminderController.getRemindersByUserId);
 router.post(
   "/",
+  authMiddleware,
   validateData(createReminderSchema),
   ReminderController.createReminder
 );

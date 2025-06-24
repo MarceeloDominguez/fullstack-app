@@ -16,6 +16,7 @@ export const createReminderSchema = reminderSchema.omit({
   id: true,
   createdAt: true,
   completed: true,
+  userId: true,
 });
 
 export const updateReminderSchema = z.object({
