@@ -63,8 +63,12 @@ export const ReminderController = {
   async deleteReminder(req, res, next) {
     try {
       const reminderId = parseInt(req.params.id, 10);
+      const authenticatedUserId = req.user.id;
 
-      const deletedReminder = await ReminderService.deleteReminder(reminderId);
+      const deletedReminder = await ReminderService.deleteReminder(
+        reminderId,
+        authenticatedUserId
+      );
       res.status(200).json(deletedReminder);
     } catch (error) {
       next(error);

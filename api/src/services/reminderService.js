@@ -48,9 +48,7 @@ export const ReminderService = {
     return updatedReminder;
   },
 
-  async deleteReminder(id) {
-    const authenticatedUserId = 1;
-
+  async deleteReminder(id, authenticatedUserId) {
     const reminder = await ReminderModel.findById(id);
 
     if (!reminder) {

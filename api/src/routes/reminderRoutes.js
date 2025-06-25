@@ -23,6 +23,6 @@ router.patch(
   validateData(updateReminderSchema),
   ReminderController.updateReminder
 );
-router.delete("/:id", ReminderController.deleteReminder);
+router.delete("/:id", authMiddleware, ReminderController.deleteReminder);
 
 export default router;
