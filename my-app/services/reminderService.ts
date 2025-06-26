@@ -105,10 +105,16 @@ export async function updateOldReminder(
 }
 
 export async function deleteReminder(id: number) {
+  const token = await SecureStore.getItemAsync("token");
+
   const response = await fetch(
     `${process.env.EXPO_PUBLIC_API_URL}/reminders/${id}`,
     {
       method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
     }
   );
 

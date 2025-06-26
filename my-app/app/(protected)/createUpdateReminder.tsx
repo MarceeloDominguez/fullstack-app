@@ -88,7 +88,6 @@ export default function CreateUpdateReminder() {
           style: "destructive",
           onPress: () => {
             removeReminder();
-            console.log("Reminder deleted");
           },
         },
       ]
